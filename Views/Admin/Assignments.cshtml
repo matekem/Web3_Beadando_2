@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Assignments";
+}
+
+<h1>New Homework</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="deadline">Deadline:</label>
+        <input type="date" class="form-control" id="deadline" name="Deadline" required>
+    </div>
+
+    <div class="form-group">
+        <label for="subjectId">Subject:</label>
+        <select class="form-control" id="subjectId" name="SubjectId" required>
+
+                <option value="test">test</option>
+
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="Description" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category:</label>
+        <select class="form-control" id="category" name="Category" required>
+            <option value="Homework">Homework</option>
+            <option value="Test">Test</option>
+            <option value="Exam">Exam</option>
+            <option value="Assignment">Assignment</option>
+            <!-- Egyéb kategóriák hozzáadása, ha szükséges -->
+        </select>
+    </div>
+
+    <!-- Egyéb mezők hozzáadása, ha szükséges -->
+
+    <button type="submit" class="btn btn-primary">Add Homework</button>
+</form>
