@@ -5,7 +5,7 @@ using Web3_Beadando.Models;
 
 namespace Web3_Beadando.Areas.Identity.Data;
 
-public class SchoolContext : IdentityDbContext<IdentityUser>
+public class SchoolContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }

@@ -7,7 +7,7 @@ namespace Web3_Beadando
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ namespace Web3_Beadando
                 options.UseSqlite(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
             { options.SignIn.RequireConfirmedAccount = false;
 
             })  .AddRoles<IdentityRole>()
@@ -56,6 +56,47 @@ namespace Web3_Beadando
             });
             
             app.MapRazorPages();
+
+            using(var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var roles = new[] { "Teacher", "Student" };
+
+                foreach (var role in roles)
+                {
+                    if(!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                string email = "admin@admin.hu";
+                string password = "asdQWE123!";
+
+                if(await usermanager.FindByEmailAsync(email) == null)
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        EmailConfirmed = true,
+                        FullName = "Admin"
+                    };
+
+                    var result = await usermanager.CreateAsync(user, password);
+
+                    if(result.Succeeded)
+                    {
+                        await usermanager.AddToRoleAsync(user, "Teacher");
+                    }
+                }   
+            }
 
             app.Run();
         }
