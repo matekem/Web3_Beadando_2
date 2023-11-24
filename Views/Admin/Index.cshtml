@@ -4,14 +4,15 @@
     ViewData["Title"] = "Admin Panel";
 }
 
-<!-- Button to add a new subject with instructor -->
+<h1>Admin Panel</h1>
+
+<a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create a new user</a>
+
 <a class="btn btn-primary" href="@Url.Action("NewSubject", "Admin", new { area = "" })">Add New Subject</a>
 
-<!-- Button to add a new classroom -->
 <a class="btn btn-primary" href="@Url.Action("NewClassroom", "Admin", new { area = "" })">Add New Classroom</a>
 
-<!-- Button to set class schedule -->
 <a class="btn btn-primary" href="@Url.Action("EditSubject", "Admin", new { area = "" })">Set Class Schedule</a>
 
-<!-- Button to add homework or exam -->
 <a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Assignments</a>
+

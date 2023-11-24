@@ -11,8 +11,8 @@ using Web3_Beadando.Areas.Identity.Data;
 namespace Web3_Beadando.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20231118074834_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231122142844_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -255,7 +255,12 @@ namespace Web3_Beadando.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Subjects");
                 });
@@ -328,6 +333,17 @@ namespace Web3_Beadando.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Web3_Beadando.Models.Subject", b =>
+                {
+                    b.HasOne("Web3_Beadando.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Teacher");
                 });
 #pragma warning restore 612, 618
         }
