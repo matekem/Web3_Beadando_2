@@ -1,34 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Web3_Beadando.Areas.Identity.Data;
 using Web3_Beadando.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web3_Beadando.Views.Admin
 {
-    public class NewSubject : PageModel
+    public class NewSubjectModel : PageModel
     {
         public Subject SubjectToAdd { get; set; }
         private readonly SchoolContext _dbContext;
 
-        public IActionResult OnPostAsync()
+
+        // Property to hold the list of teachers
+        public SelectList Teachers { get; set; }
+        // Property to hold the selected teacher ID
+        [BindProperty]
+        public int SelectedTeacherId { get; set; }
+
+        public NewSubjectModel(SchoolContext dbContext)
         {
-            
-            Teacher.AddNewSubject(SubjectToAdd.Name, SubjectToAdd.Teacher);
+            _dbContext = dbContext;
+        }
 
-            // Assuming _dbContext is your DbContext
-            var newSubject = new Subject
-            {
-                Name = SubjectToAdd.Name,
-                Teacher = SubjectToAdd.Teacher
-                // Add any other properties for the Subject model
-            };
+        public void OnGet() 
+        {
 
-            _dbContext.Subjects.Add(newSubject);
-            _dbContext.SaveChanges();
+            // Fetch teachers from the database
+            var teachers = _dbContext.Teachers.ToList();
 
-           return RedirectToPage("/Admin/");
+            // Create a SelectList
+            Teachers = new SelectList(teachers, "Id", "FullName");
+
+        }
+
+
+        public IActionResult OnPost(Subject subject, Teacher teacher)
+        {
+            //var selectedTeacher = _dbContext.Teachers.FirstOrDefault(t => t.Id == SelectedTeacherId);
+
+            //Console.WriteLine(selectedTeacher);
+            //// Rest of your code...
+            return RedirectToPage("/Admin/");
         }
     }
+
 }

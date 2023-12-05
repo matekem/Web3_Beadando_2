@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Web3_Beadando.Areas.Identity.Data;
 using Web3_Beadando.Models;
+
+
 
 namespace Web3_Beadando
 {
@@ -17,10 +20,11 @@ namespace Web3_Beadando
                 options.UseSqlite(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
-            { options.SignIn.RequireConfirmedAccount = false;
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
 
-            })  .AddRoles<IdentityRole>()
+            }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SchoolContext>();
 
 
@@ -54,10 +58,10 @@ namespace Web3_Beadando
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            
+
             app.MapRazorPages();
 
-            using(var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -65,7 +69,7 @@ namespace Web3_Beadando
 
                 foreach (var role in roles)
                 {
-                    if(!await roleManager.RoleExistsAsync(role))
+                    if (!await roleManager.RoleExistsAsync(role))
                     {
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
@@ -79,7 +83,7 @@ namespace Web3_Beadando
                 string email = "admin@admin.hu";
                 string password = "asdQWE123!";
 
-                if(await usermanager.FindByEmailAsync(email) == null)
+                if (await usermanager.FindByEmailAsync(email) == null)
                 {
                     var user = new ApplicationUser
                     {
@@ -91,14 +95,56 @@ namespace Web3_Beadando
 
                     var result = await usermanager.CreateAsync(user, password);
 
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         await usermanager.AddToRoleAsync(user, "Teacher");
                     }
-                }   
+                }
             }
+            
+            SeedTeacherRoles(app);
 
             app.Run();
         }
+
+        private static void SeedTeacherRoles(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<SchoolContext>();
+
+                // Ensure "Teacher" role exists
+                if (!roleManager.RoleExistsAsync("Teacher").Result)
+                {
+                    var role = new IdentityRole("Teacher");
+                    roleManager.CreateAsync(role).Wait();
+                }
+
+                // Find users with "Teacher" role
+                var teacherUsers = userManager.GetUsersInRoleAsync("Teacher").Result;
+
+                foreach (var user in teacherUsers)
+                {
+                    // Check if the user is not already in the Teachers table
+                    if (!dbContext.Teachers.Any(t => t.Id == user.Id))
+                    {
+                        var teacher = new Teacher
+                        {
+                            Id = user.Id,
+                            FullName = user.FullName,
+                            Email = user.Email
+                                                 
+                        };
+
+                        dbContext.Teachers.Add(teacher);
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+        }
+
+
     }
 }

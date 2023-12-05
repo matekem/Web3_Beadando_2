@@ -1,7 +1,9 @@
-﻿@using Web3_Beadando.Models;
-@{
-    ViewData["Title"] = "New Subject";
-}
+﻿@page
+@using Web3_Beadando.Models
+@using Web3_Beadando.Views.Admin
+@model Web3_Beadando.Views.Admin.NewSubjectModel
+
+
 
 <h1>New Subject</h1>
 
@@ -13,7 +15,10 @@
 
     <div class="form-group">
         <label for="instructorName">Instructor Name:</label>
-        <input type="text" class="form-control" id="instructorName" name="InstructorName" required>
+         <select class="form-control" id="instructorName" name="SelectedTeacherId" asp-items="@(new SelectList(Model.Teachers, "Id", "FullName"))">
+        
+        <option value="">Select Instructor</option>
+        </select>
     </div>
 
     <input type="submit" class="btn btn-primary" />
