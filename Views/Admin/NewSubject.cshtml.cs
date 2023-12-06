@@ -12,41 +12,34 @@ namespace Web3_Beadando.Views.Admin
 {
     public class NewSubjectModel : PageModel
     {
-        public Subject SubjectToAdd { get; set; }
-        private readonly SchoolContext _dbContext;
-
-
-        // Property to hold the list of teachers
-        public SelectList Teachers { get; set; }
-        // Property to hold the selected teacher ID
-        [BindProperty]
-        public int SelectedTeacherId { get; set; }
-
-        public NewSubjectModel(SchoolContext dbContext)
+        public NewSubjectModel()
         {
-            _dbContext = dbContext;
+            
         }
-
-        public void OnGet() 
-        {
-
-            // Fetch teachers from the database
-            var teachers = _dbContext.Teachers.ToList();
-
-            // Create a SelectList
-            Teachers = new SelectList(teachers, "Id", "FullName");
-
-        }
+        //public Subject SubjectToAdd { get; set; }
+        //private readonly SchoolContext _dbContext;
+        //public SelectList Teachers { get; set; }
+        //public int SelectedTeacherId { get; set; }
 
 
-        public IActionResult OnPost(Subject subject, Teacher teacher)
-        {
-            //var selectedTeacher = _dbContext.Teachers.FirstOrDefault(t => t.Id == SelectedTeacherId);
+        //public void OnGet() 
+        //{
 
-            //Console.WriteLine(selectedTeacher);
-            //// Rest of your code...
-            return RedirectToPage("/Admin/");
-        }
+        //    var teachers = _dbContext.Teachers.ToList();
+
+        //    Teachers = new SelectList(teachers, "Id", "FullName");
+        //    Console.WriteLine("ONGET");
+
+        //}
+
+
+        //public void OnPost()
+        //{
+
+        //    Console.WriteLine("ONPOST");
+
+
+        //}
     }
 
 }

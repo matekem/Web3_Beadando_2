@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web3_Beadando.Models;
+using Web3_Beadando.Views.Admin;
 
 namespace Web3_Beadando.Controllers
 {
     public class AdminController : Controller
     {
+        public HttpContext Context { get; set; }
+
         [Authorize(Roles = "Teacher")]
         public IActionResult Index()
         {
@@ -15,6 +19,13 @@ namespace Web3_Beadando.Controllers
         public IActionResult NewSubject()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult NewSubject(Subject subject)
+        {
+
+            Console.WriteLine(subject.Name);
+            return Redirect("~/Admin");
         }
 
 
