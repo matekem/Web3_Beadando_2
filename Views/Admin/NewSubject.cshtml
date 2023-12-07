@@ -1,12 +1,14 @@
 ﻿@page
-@using Web3_Beadando.Models
-@model Web3_Beadando.Models.Subject
+@using Microsoft.EntityFrameworkCore
+@using Web3_Beadando.Areas.Identity.Data
+@using Web3_Beadando.Services
+@model SchoolService
 
 
 
 <h1>New Subject</h1>
-
-@using(Html.BeginForm("NewSubject", "Admin", FormMethod.Post))
+@*
+<!--@using(Html.BeginForm("NewSubject", "Admin", FormMethod.Post))
 {
         <div class="form-group">
             <label for="subjectName">Subject name:</label>
@@ -21,20 +23,36 @@
             <button type="submit" class="btn btn-primary">Submit</button>
 }
 
-@* <form method="post" asp-action="NewSubject" asp-controller="Admin">
+*@
+<form method="post" asp-action="NewSubject" asp-controller="Admin">
     <div class="form-group">
         <label for="subjectName">Subject Name:</label>
         <input type="text" class="form-control" id="subjectName" name="SubjectName" required>
     </div>
 
     <div class="form-group">
-        <label for="instructorName">Instructor Name:</label>
-         <select class="form-control" id="instructorName" name="SelectedTeacherId">
+        <label for="instructorName">Teacher Name:</label>
         
-        <option value="">Select Instructor</option>
-        </select>
+        <select class="form-control" id="teacherSelect" name="TeacherId" required>
+            @{
+                SchoolService schoolService = new();
+                var teachers = schoolService.teachers;
+
+            if(teachers == null)
+            {
+                    <option>No teachers available</option>
+            }else{
+                    foreach (var teacher in teachers)
+                    {
+                        <option value="@teacher.Id">@teacher.FullName</option>
+                    }
+            }
+
+            
+         }
+</select>
     </div>
           <input type="submit" />
 
-</form> *@
+</form> 
     

@@ -4,7 +4,12 @@
     ViewData["Title"] = "Admin Panel";
 }
 
-<h1>Admin Panel</h1>
+
+
+<div class="text-center">
+
+    <h1>Admin Panel</h1>
+    <br />
 
 <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create a new user</a>
 
@@ -12,7 +17,8 @@
 
 <a class="btn btn-primary" href="@Url.Action("NewClassroom", "Admin", new { area = "" })">Add New Classroom</a>
 
-<a class="btn btn-primary" href="@Url.Action("EditSubject", "Admin", new { area = "" })">Set Class Schedule</a>
+<a class="btn btn-primary" href="@Url.Action("NewClass", "Admin", new { area = "" })">Add new class</a>
 
-<a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Assignments</a>
+<a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Add new assignment</a>
 
+</div>

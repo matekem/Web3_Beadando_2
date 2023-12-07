@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Web3_Beadando.Models;
 
 namespace Web3_Beadando.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Teacher")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -122,7 +124,7 @@ namespace Web3_Beadando.Areas.Identity.Pages.Account
 
                 */
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, Role=Input.Role };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (Input.Role == "Teacher")

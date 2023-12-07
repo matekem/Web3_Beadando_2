@@ -23,6 +23,22 @@ namespace Web3_Beadando.Controllers
         {
             return View();
         }
+        public IActionResult Timetable()
+        {
+            return View();
+        }
+        public IActionResult Assignments()
+        {
+            return View();
+        }
+        public IActionResult Stats()
+        {
+            return View();
+        }
+        public IActionResult Export()
+        {
+            return View();
+        }   
        
 
 

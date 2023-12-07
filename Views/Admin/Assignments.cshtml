@@ -1,4 +1,7 @@
-﻿@{
+﻿@using System.Security.Claims
+@using Web3_Beadando.Services
+@model SchoolService
+@{
     ViewData["Title"] = "Assignments";
 }
 
@@ -14,7 +17,35 @@
         <label for="subjectId">Subject:</label>
         <select class="form-control" id="subjectId" name="SubjectId" required>
 
-                <option value="test">test</option>
+            @{
+                SchoolService schoolService = new SchoolService();
+                var subjects = schoolService.GetAllSubjects();
+                var mySubjects = new List<Subject>();
+                foreach(var subject in subjects)
+                {
+                    if (subject.TeacherId.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim())
+                    {
+                        mySubjects.Add(subject);
+                    }
+                }
+                foreach (var subject in mySubjects)
+                {
+
+                    if (mySubjects == null)
+                        {
+                        <option>No subjects</option>
+                        break;
+                    }
+                    else
+                    {
+                        <option value="@subject.Id">@subject.Name</option>
+                    };
+
+                    
+                }
+                }
+                   
+
 
         </select>
     </div>
@@ -31,11 +62,9 @@
             <option value="Test">Test</option>
             <option value="Exam">Exam</option>
             <option value="Assignment">Assignment</option>
-            <!-- Egyéb kategóriák hozzáadása, ha szükséges -->
         </select>
     </div>
 
-    <!-- Egyéb mezők hozzáadása, ha szükséges -->
 
     <button type="submit" class="btn btn-primary">Add Homework</button>
 </form>

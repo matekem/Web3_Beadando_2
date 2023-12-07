@@ -1,17 +1,32 @@
-﻿@{
+﻿@using Web3_Beadando.Services
+@model SchoolService
+
+@{
     ViewData["Title"] = "New Lesson";
 }
 
-<h1>Edit Subject</h1>
+<h1>Add new class</h1>
 
 <form method="post">
 
     <div class="form-group">
         <label for="subjectId">Subject:</label>
         <select class="form-control" id="subjectId" name="SubjectId" required>
-            <option value="">Select a Subject</option>
+           
+         
 
-            <option value="test">test</option>
+            @{
+
+                SchoolService service = new SchoolService();
+                List<Subject> subjects = service.GetAllSubjects();
+
+                foreach (Subject subject in subjects)
+                {
+                    <option value="@subject.Id">@subject.Name</option>
+                }
+            }
+            
+
 
         </select>
     </div>
@@ -37,8 +52,8 @@
         <select class="form-control" id="classDuration" name="classDuration" required>
 
             <option value="45">45 minutes</option>
-            <option value="45">60 minutes</option>
-            <option value="45">90 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="90">90 minutes</option>
 
         </select>
     </div>
@@ -49,7 +64,14 @@
         <label for="classroomId">Classroom:</label>
         <select class="form-control" id="classroomId" name="ClassroomId" required>
             
-                <option value="test">test</option>
+               @{
+                List<Classroom> classrooms = service.GetAllClassrooms();
+
+                foreach (Classroom classroom in classrooms)
+                {
+                    <option value="@classroom.Id">@classroom.Name</option>
+                }
+               }
             
         </select>
     </div>

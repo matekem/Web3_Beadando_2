@@ -75,7 +75,7 @@ namespace Web3_Beadando
                     }
                 }
             }
-
+            /*
             using (var scope = app.Services.CreateScope())
             {
                 var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -100,14 +100,15 @@ namespace Web3_Beadando
                         await usermanager.AddToRoleAsync(user, "Teacher");
                     }
                 }
-            }
+            }*/
             
-            SeedTeacherRoles(app);
+            //SeedTeacherRoles(app);
+
 
             app.Run();
         }
 
-        private static void SeedTeacherRoles(IApplicationBuilder app)
+        /*private static void SeedTeacherRoles(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
@@ -123,12 +124,12 @@ namespace Web3_Beadando
                 }
 
                 // Find users with "Teacher" role
-                var teacherUsers = userManager.GetUsersInRoleAsync("Teacher").Result;
+                var teacherUsers = userManager.Users.Where(u => u.Role == "Teacher").ToList();
 
                 foreach (var user in teacherUsers)
                 {
                     // Check if the user is not already in the Teachers table
-                    if (!dbContext.Teachers.Any(t => t.Id == user.Id))
+                    if (!dbContext.UserRoles.Any(t => t.UserId == user.Id))
                     {
                         var teacher = new Teacher
                         {
@@ -143,7 +144,9 @@ namespace Web3_Beadando
                     }
                 }
             }
-        }
+        }*/
+
+
 
 
     }

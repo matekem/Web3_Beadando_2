@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web3_Beadando.Areas.Identity.Data;
 
@@ -10,9 +11,10 @@ using Web3_Beadando.Areas.Identity.Data;
 namespace Web3_Beadando.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20231207132553_NewAssigment")]
+    partial class NewAssigment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.23");
@@ -225,10 +227,6 @@ namespace Web3_Beadando.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Deadline")

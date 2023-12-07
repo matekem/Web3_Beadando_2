@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web3_Beadando.Areas.Identity.Data;
 
@@ -10,9 +11,10 @@ using Web3_Beadando.Areas.Identity.Data;
 namespace Web3_Beadando.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20231207125200_NewClass2")]
+    partial class NewClass2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.23");
@@ -223,25 +225,33 @@ namespace Web3_Beadando.Migrations
 
             modelBuilder.Entity("Web3_Beadando.Models.Assignment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
+                    b.Property<string>("Deadline")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Deadline")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TeacherIdId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherIdId");
 
                     b.ToTable("Assignments");
                 });
@@ -262,10 +272,17 @@ namespace Web3_Beadando.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("SubjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TeacherId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -362,6 +379,23 @@ namespace Web3_Beadando.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Web3_Beadando.Models.Assignment", b =>
+                {
+                    b.HasOne("Web3_Beadando.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Web3_Beadando.Models.ApplicationUser", "TeacherId")
+                        .WithMany()
+                        .HasForeignKey("TeacherIdId");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("TeacherId");
                 });
 #pragma warning restore 612, 618
         }

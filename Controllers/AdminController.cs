@@ -1,21 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web3_Beadando.Areas.Identity.Data;
+using Web3_Beadando.Migrations;
 using Web3_Beadando.Models;
 using Web3_Beadando.Views.Admin;
 
 namespace Web3_Beadando.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class AdminController : Controller
     {
-        public HttpContext Context { get; set; }
+        private readonly SchoolContext _dbContext;
 
-        [Authorize(Roles = "Teacher")]
+        public AdminController(SchoolContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Teacher")]
         public IActionResult NewSubject()
         {
             return View();
@@ -23,31 +29,81 @@ namespace Web3_Beadando.Controllers
         [HttpPost]
         public IActionResult NewSubject(Subject subject)
         {
+            //create new subject from formdata
+            subject.Id = new System.Guid();
+            subject.Name = Request.Form["SubjectName"];
+            subject.TeacherId = Request.Form["TeacherId"];
+            _dbContext.Subjects.Add(subject);
+            _dbContext.SaveChanges();
 
-            Console.WriteLine(subject.Name);
             return Redirect("~/Admin");
         }
 
 
-        [Authorize(Roles = "Teacher")]
         public IActionResult NewClassroom()
         {
             return View();
         }
 
-        [Authorize(Roles = "Teacher")]
-        public IActionResult EditSubject()
+        [HttpPost]
+        public IActionResult NewClassroom(Classroom classroom)
+        {
+            classroom.Name = Request.Form["ClassroomName"];
+            classroom.Id = new System.Guid();
+            
+            classroom.isLab = Request.Form["isLab"] == "on";
+            if (classroom.isLab)
+            {
+                classroom.SubjectId  = new System.Guid(Request.Form["SubjectId"]);
+            }
+            else
+            {
+                classroom.SubjectId = Guid.Empty;
+            }
+            _dbContext.Classrooms.Add(classroom);
+            _dbContext.SaveChanges();
+
+            return Redirect("~/Admin");
+        }
+
+        public IActionResult NewClass()
         {
             return View();
         }
 
-        [Authorize(Roles = "Teacher")]
+        [HttpPost]
+        public IActionResult NewClass(Class myClass)
+        {
+            myClass.Id = new System.Guid();
+            myClass.SubjectId = new System.Guid(Request.Form["SubjectId"]);
+            myClass.Day = Request.Form["Day"];
+            myClass.StartTime = new System.TimeOnly(int.Parse(Request.Form["StartTime"].ToString().Split(":")[0]), int.Parse(Request.Form["StartTime"].ToString().Split(":")[1]), 0);
+            myClass.Duration = int.Parse(Request.Form["classDuration"]);
+            myClass.ClassroomId = new System.Guid(Request.Form["ClassroomId"]);          
+            _dbContext.Classes.Add(myClass);
+            _dbContext.SaveChanges();
+
+            return Redirect("~/Admin");
+        }
+
         public IActionResult Assignments()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Assignments(Assignment assignment)
+        {
+            assignment.Id = new System.Guid();
+            assignment.SubjectId = new System.Guid(Request.Form["SubjectId"]);
+            assignment.Description = Request.Form["Description"];
+            assignment.Deadline = System.DateTime.Parse(Request.Form["Deadline"]);
+            assignment.Category = Request.Form["Category"];
 
-        [Authorize(Roles = "Teacher")]
+            _dbContext.Assignments.Add(assignment);
+            _dbContext.SaveChanges();
+
+            return Redirect("~/Admin");
+        }
         public IActionResult CreateNewUser()
         {
             return View();

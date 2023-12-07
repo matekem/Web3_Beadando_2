@@ -1,0 +1,62 @@
+﻿@page
+@using Web3_Beadando.Services
+@model SchoolService
+@{
+    ViewBag.Greeting = "Timetable";
+}
+
+<h1>Timetable</h1>
+<br />
+
+@{
+    SchoolService schoolService = new SchoolService();
+    if (schoolService.classes != null && schoolService.classes.Any())
+    {
+
+        List<string> days = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
+        foreach (var day in days)
+        {
+            <h2>@day</h2>
+            var dayClasses = schoolService.classes.Where(x => x.Day == day).OrderBy(x => x.StartTime);
+            if (dayClasses != null && dayClasses.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Classroom</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var scheduleItem in dayClasses)
+                        {
+                            var subject = schoolService.GetSubjectById(scheduleItem.SubjectId);
+                            var classEnd = scheduleItem.StartTime.AddMinutes(scheduleItem.Duration);
+                            var classroom = schoolService.GetClassroomById(scheduleItem.ClassroomId);
+                            var teacher = schoolService.GetUserById(subject.TeacherId);
+                            <tr>
+                                <td>@scheduleItem.StartTime - @classEnd </td>
+                                <td>@classroom.Name</td>
+                                <td>@subject.Name</td>
+                                <td>@teacher.FullName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No classes on this day.</p>
+            }
+        }
+    }
+
+    else
+    {
+        <p>No schedule available.</p>
+    }
+
+}
