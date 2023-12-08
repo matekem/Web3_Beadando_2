@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
+@using Web3_Beadando.Services
+@model SchoolService
+
 @{
+    ViewData["Title"]= "Assignments";
 }
+
+<h1>Upcoming assignments</h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Deadline</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Title</th>            
+            <th scope="col">Category</th>
+        </tr>
+    </thead>
+    <tbody>@{
+        SchoolService schoolService = new SchoolService();
+        //Sort assigments by deadline
+            var assigments = schoolService.assignments.OrderBy(x => x.Deadline);
+            foreach (var assignment in assigments)
+            {
+                <tr>
+                    <td>@assignment.Deadline</td>
+                    <td>@schoolService.GetSubjectById(assignment.SubjectId).Name</td>
+                    <td>@assignment.Title</td>
+                    <td>@assignment.Category</td>
+                </tr>
+            }
+        }
+       
+    </tbody>
+</table>

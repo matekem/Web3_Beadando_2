@@ -95,8 +95,10 @@ namespace Web3_Beadando.Controllers
         {
             assignment.Id = new System.Guid();
             assignment.SubjectId = new System.Guid(Request.Form["SubjectId"]);
+            assignment.Title = Request.Form["Title"];
             assignment.Description = Request.Form["Description"];
-            assignment.Deadline = System.DateTime.Parse(Request.Form["Deadline"]);
+            assignment.Deadline = DateTime.Parse(Request.Form["DeadLine"]);
+            assignment.Deadline = assignment.Deadline.AddHours(23).AddMinutes(59).AddSeconds(59);
             assignment.Category = Request.Form["Category"];
 
             _dbContext.Assignments.Add(assignment);

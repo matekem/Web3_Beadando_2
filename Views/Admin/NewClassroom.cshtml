@@ -37,7 +37,7 @@
             }
         </select>
     </div>
-
+    <br />
     <button type="submit" class="btn btn-primary">Add Classroom</button>
 </form>
 
@@ -57,3 +57,38 @@
         });
     });
 </script>
+
+<div>
+    <h2>Classrooms</h2>
+<table class="table">
+        <thead>
+            <tr>
+                <th>Classroom Name</th>
+                <th>Is Lab</th>
+                <th>Subject</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                SchoolService schoolService2 = new();
+                foreach (var classroom in schoolService2.classrooms)
+                {
+                    var classroomSubject = schoolService2.GetSubjectById(classroom.SubjectId);
+                    var isLab = classroom.isLab ? "Yes" : "No";
+                    <tr>
+                        <td>@classroom.Name</td>
+                        <td>@isLab</td>
+                        <td>@classroomSubject.Name</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@classroom.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@classroom.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+                   
+              }
+</tbody>
+    </table>
+
+</div>

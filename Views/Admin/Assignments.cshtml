@@ -23,7 +23,7 @@
                 var mySubjects = new List<Subject>();
                 foreach(var subject in subjects)
                 {
-                    if (subject.TeacherId.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim())
+                    if (subject.TeacherId.ToString() == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) //Csak a bejelentkezett tanár tárgyai jelennek meg
                     {
                         mySubjects.Add(subject);
                     }
@@ -49,6 +49,10 @@
 
         </select>
     </div>
+    <div class="form-group">
+        <label for="Title">Title:</label>
+<       <input type="text" class="form-control" id="Title" name="Title" required>
+    </div>
 
     <div class="form-group">
         <label for="description">Description:</label>
@@ -66,5 +70,5 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Add Homework</button>
+    <button type="submit" class="btn btn-primary">Add Assignment</button>
 </form>

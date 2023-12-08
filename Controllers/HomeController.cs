@@ -16,6 +16,7 @@ namespace Web3_Beadando.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            ViewData["Message"] = "Welcome to the Home Page!";
             return View();
         }
 
