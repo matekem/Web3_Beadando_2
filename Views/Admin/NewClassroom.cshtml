@@ -80,9 +80,13 @@
                         <td>@classroom.Name</td>
                         <td>@isLab</td>
                         <td>@classroomSubject.Name</td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@classroom.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@classroom.Id">Delete</a>
+                        <td>                          
+                            <form asp-action="EditClassrom" method="post" asp-route-id="@classroom.Id">
+                                <button type="submit">Edit</button>
+                            </form>|
+                            <form asp-action="DeleteClassroom" method="post" asp-route-id="@classroom.Id">
+                                <button type="submit">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 }

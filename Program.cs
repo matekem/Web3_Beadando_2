@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Web3_Beadando.Areas.Identity.Data;
 using Web3_Beadando.Models;
+using Web3_Beadando.Services;
 
 
 
@@ -27,7 +28,8 @@ namespace Web3_Beadando
             }).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SchoolContext>();
 
-
+            SchoolService schoolService = new();
+            builder.Services.AddScoped<SchoolService>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -102,52 +104,11 @@ namespace Web3_Beadando
                 }
             }
             
-            //SeedTeacherRoles(app);
-
 
             app.Run();
         }
 
-        /*private static void SeedTeacherRoles(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<SchoolContext>();
-
-                // Ensure "Teacher" role exists
-                if (!roleManager.RoleExistsAsync("Teacher").Result)
-                {
-                    var role = new IdentityRole("Teacher");
-                    roleManager.CreateAsync(role).Wait();
-                }
-
-                // Find users with "Teacher" role
-                var teacherUsers = userManager.Users.Where(u => u.Role == "Teacher").ToList();
-
-                foreach (var user in teacherUsers)
-                {
-                    // Check if the user is not already in the Teachers table
-                    if (!dbContext.UserRoles.Any(t => t.UserId == user.Id))
-                    {
-                        var teacher = new Teacher
-                        {
-                            Id = user.Id,
-                            FullName = user.FullName,
-                            Email = user.Email
-                                                 
-                        };
-
-                        dbContext.Teachers.Add(teacher);
-                        dbContext.SaveChanges();
-                    }
-                }
-            }
-        }*/
-
-
-
+      
 
     }
 }

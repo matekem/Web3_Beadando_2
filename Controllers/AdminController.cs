@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Web3_Beadando.Areas.Identity.Data;
 using Web3_Beadando.Migrations;
 using Web3_Beadando.Models;
+using Web3_Beadando.Services;
 using Web3_Beadando.Views.Admin;
 
 namespace Web3_Beadando.Controllers
@@ -11,11 +12,15 @@ namespace Web3_Beadando.Controllers
     public class AdminController : Controller
     {
         private readonly SchoolContext _dbContext;
+        private readonly SchoolService _schoolService;
 
-        public AdminController(SchoolContext dbContext)
+        public AdminController(SchoolContext dbContext, SchoolService schoolService )
         {
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
+            this._schoolService = schoolService;
         }
+
+       
 
         public IActionResult Index()
         {
@@ -127,6 +132,56 @@ namespace Web3_Beadando.Controllers
             _dbContext.SaveChanges();
 
             return Redirect("~/");
+        }
+
+        [HttpPost]        
+        public IActionResult DeleteClassroom(Guid id)
+        {
+            // Perform the deletion logic
+            _schoolService.DeleteSubject(id);
+
+            // Redirect to the page where classrooms are displayed
+            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+        }
+
+        [HttpPost]
+        public IActionResult DeleteSubject(Guid id)
+        {
+            // Perform the deletion logic
+            _schoolService.DeleteSubject(id);
+
+            // Redirect to the page where classrooms are displayed
+            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+        }
+
+        [HttpPost]
+        public IActionResult DeleteAssignment(Guid id)
+        {
+            // Perform the deletion logic
+            _schoolService.DeleteAssignment(id);
+
+            // Redirect to the page where classrooms are displayed
+            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+        }
+
+        [HttpPost]
+        public IActionResult DeleteClass(Guid id)
+        {
+            // Perform the deletion logic
+            _schoolService.DeleteClass(id);
+
+            // Redirect to the page where classrooms are displayed
+            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCategory(Guid id)
+        {
+            // Perform the deletion logic
+            _schoolService.DeleteCategory(id);
+
+            // Redirect to the page where classrooms are displayed
+            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
         }
     }
 }

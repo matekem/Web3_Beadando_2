@@ -15,10 +15,9 @@ namespace Web3_Beadando.Services
         public List<Classroom> classrooms;
         public List<Class> classes;
         public List<Assignment> assignments;
-        public List<Category> categories;
+        public List<Category> categories; 
 
         public SchoolService()
-
         {
             _dbContext = ConnectToDB();
             users = GetAllStudents();
@@ -39,6 +38,8 @@ namespace Web3_Beadando.Services
             _dbContext = new SchoolContext(optionsBuilder.Options);
             return _dbContext;
         }
+
+        #region GetterMethods
 
         public List<ApplicationUser> GetAllTeachers()
         {
@@ -204,5 +205,84 @@ namespace Web3_Beadando.Services
             return category;
         }
 
+        private Assignment GetAssignmentById(Guid id)
+        {
+            Assignment assignment = new Assignment();
+
+            foreach(Assignment a in _dbContext.Assignments)
+            {
+                if(a.Id == id)
+                {
+                    assignment = a;
+                }
+            }
+            return assignment;
+        }
+
+        private Class GetClassById(Guid id)
+        {
+            Class lesson = new();
+
+            foreach (Class l in _dbContext.Classes)
+            {
+                if (l.Id == id)
+                {
+                    lesson = l;
+                }
+            }
+            return lesson;
+        }
+
+        #endregion
+
+        #region AddMethods
+        #endregion
+
+        #region DeleteMethods
+
+        internal void DeleteSubject(Guid id)
+        {
+            if(id != null)
+            {
+                var subject = GetSubjectById(id);
+                _dbContext.Subjects.Remove(subject);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        internal void DeleteAssignment(Guid id)
+        {
+           if(id != null)
+            {
+                var assignment = GetAssignmentById(id);
+                _dbContext.Assignments.Remove(assignment);
+                _dbContext.SaveChanges();
+            }
+        }
+
+       
+
+        internal void DeleteClass(Guid id)
+        {
+            if(id != null)
+            {
+                var lesson = GetClassById(id);
+                _dbContext.Classes.Remove(lesson);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        internal void DeleteCategory(Guid id)
+        {
+           if(id != null)
+            {
+                var category = GetCategoryById(id);
+                _dbContext.Categories.Remove(category);
+                _dbContext.SaveChanges();
+            }
+        }
+
+
+        #endregion
     }
 }

@@ -112,9 +112,12 @@
                     @{if (schoolService2.GetSubjectById(assignment.SubjectId).TeacherId == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) //Csak a bejelentkezett tanár feladatai jelennek meg
                         {
                            <td>
-
-                                <a asp-action="EditAssignment" asp-controller="Admin" asp-route-id="@assignment.Id">Edit</a> |
-                                <a asp-action="DeleteAssignment" asp-controller="Admin" asp-route-id="@assignment.Id">Delete</a>
+                                <form asp-action="EditAssignment" method="post" asp-route-id="@assignment.Id">
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                                <form asp-action="DeleteAssignment" method="post" asp-route-id="@assignment.Id">
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                </form>
                             </td>
                        
                         }

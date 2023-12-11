@@ -103,8 +103,12 @@
                         <td>@lesson.Duration</td>
                         <td>@schoolService2.GetClassroomById(lesson.ClassroomId).Name</td>
                      <td>
-                    <a asp-action="Edit" asp-route-id="@lesson.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@lesson.Id">Delete</a>
+                    <form asp-action="EditClass" method="post" asp-route-id="@lesson.Id">
+                        <button type="submit">Edit </button>
+                    </form>|
+                    <form asp-action="DeleteClass" method="post" asp-route-id="@lesson.Id">
+                        <button type="submit">Delete</button>
+                    </form>
                     </td>
                     </tr>
                 }

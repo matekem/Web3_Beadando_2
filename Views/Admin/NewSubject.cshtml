@@ -66,6 +66,7 @@
             <tr>
                 <th scope="col">Teacher</th>
                 <th scope="col">Subject</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -76,7 +77,16 @@
                 {
                     <tr>
                         <td>@schoolService2.GetUserById(subject.TeacherId).FullName</td>
-                        <td>@subject.Name</td>  
+                        <td>@subject.Name</td>
+                        <td>
+                            <form asp-action="EditSubject" method="post" asp-route-id="@subject.Id">
+                                <button type="submit" class="btn btn-primary">Edit</button>
+                            </form>
+                            <br />
+                            <form asp-action="DeleteSubject" method="post" asp-route-id="@subject.Id">
+                                <button type="submit" class="btn btn-primary">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             }
