@@ -75,7 +75,7 @@ namespace Web3_Beadando
                     }
                 }
             }
-            /*
+            
             using (var scope = app.Services.CreateScope())
             {
                 var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -89,8 +89,8 @@ namespace Web3_Beadando
                     {
                         UserName = email,
                         Email = email,
-                        EmailConfirmed = true,
-                        FullName = "Admin"
+                        FullName = "Admin User",
+                        Role = "Teacher"
                     };
 
                     var result = await usermanager.CreateAsync(user, password);
@@ -100,7 +100,7 @@ namespace Web3_Beadando
                         await usermanager.AddToRoleAsync(user, "Teacher");
                     }
                 }
-            }*/
+            }
             
             //SeedTeacherRoles(app);
 

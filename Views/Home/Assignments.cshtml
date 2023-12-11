@@ -29,7 +29,7 @@
                     <td>@assignment.Deadline</td>
                     <td>@schoolService.GetSubjectById(assignment.SubjectId).Name</td>
                     <td>@assignment.Title</td>
-                    <td>@assignment.Category</td>
+                    <td>@schoolService.GetCategoryById(assignment.CategoryId).Name</td>
                 </tr>
             }
         }

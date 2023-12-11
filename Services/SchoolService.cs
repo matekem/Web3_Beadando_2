@@ -15,6 +15,7 @@ namespace Web3_Beadando.Services
         public List<Classroom> classrooms;
         public List<Class> classes;
         public List<Assignment> assignments;
+        public List<Category> categories;
 
         public SchoolService()
 
@@ -26,7 +27,9 @@ namespace Web3_Beadando.Services
             classrooms = GetAllClassrooms();
             classes = GetAllClasses();
             assignments = GetAllAssignments();
+            categories = GetAllCategories();
         }
+
 
         private SchoolContext ConnectToDB()
         {
@@ -174,6 +177,31 @@ namespace Web3_Beadando.Services
                 }
             }
             return classroom;
+        }
+
+        public List<Category> GetAllCategories()
+        {
+            var categories = new List<Category>();
+
+            foreach (var category in _dbContext.Categories)
+            {
+                categories.Add(category);
+            }
+            return categories;
+        }
+
+        public Category GetCategoryById(Guid id)
+        {
+            var category = new Category();
+
+            foreach (var cat in _dbContext.Categories)
+            {
+                if (cat.Id == id)
+                {
+                    category = cat;
+                }
+            }
+            return category;
         }
 
     }

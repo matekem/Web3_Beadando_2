@@ -78,3 +78,34 @@
 
     <button type="submit" class="btn btn-primary">Add Lesson</button>
 </form>
+
+        <!-- display all classes from db in table with options to delete or edit-->
+
+<table class="table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>Duration</th>
+                    <th>Classroom</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{SchoolService schoolService2 = new SchoolService();}
+                @foreach (var lesson in schoolService2.GetAllClasses())
+                {
+                    <tr>
+                        <td>@schoolService2.GetSubjectById(lesson.SubjectId).Name</td>
+                        <td>@lesson.Day</td>
+                        <td>@lesson.StartTime</td>
+                        <td>@lesson.Duration</td>
+                        <td>@schoolService2.GetClassroomById(lesson.ClassroomId).Name</td>
+                     <td>
+                    <a asp-action="Edit" asp-route-id="@lesson.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@lesson.Id">Delete</a>
+                    </td>
+                    </tr>
+                }
+            </tbody>

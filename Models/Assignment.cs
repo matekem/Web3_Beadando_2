@@ -10,6 +10,6 @@ namespace Web3_Beadando.Models
         public Guid SubjectId { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
-        public string Category { get; set; }
+        public Guid CategoryId { get; set; } // Reference to the Category
     }
 }

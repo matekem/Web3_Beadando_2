@@ -1,6 +1,65 @@
-﻿@model SchoolService
+﻿@model Web3_Beadando.Services.SchoolService
 @using Web3_Beadando.Services
 @{
     ViewData["Title"] = "Stats";
+
+    SchoolService schoolService = new();
+    var assignments = schoolService.assignments;
+
+    // Get all categories
+    var allCategories = schoolService.GetAllCategories();
+
+    // Count occurrences of each category, including 0 counts
+    var categoryCounts = allCategories
+        .Select(category => new
+        {
+            Category = category,
+            Count = assignments.Count(a => a.CategoryId == category.Id)
+        })
+        .ToList();
 }
 
+<div class="text-center">
+    <h1>Assignment stats</h1>
+    <br />
+    <canvas id="columnChart" width="400" height="200"></canvas>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var ctx = document.getElementById('columnChart').getContext('2d');
+
+                var data = {
+                    labels: @Html.Raw(Json.Serialize(allCategories.Select(category => category.Name))),
+                    datasets: [{
+                        label: 'Assignment Count',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        data: @Html.Raw(Json.Serialize(categoryCounts.Select(c => c.Count))),
+                    }]
+                };
+
+                var options = {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return Number.isInteger(value) ? value : '';
+                                }
+                            }
+                        }
+                    }
+                };
+
+                var columnChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: options
+                });
+            });
+        </script>
+    }
+</div>

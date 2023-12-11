@@ -58,3 +58,27 @@
 
 </form> 
     
+
+<div>
+    <!-- display all subjects in a table here-->
+<table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Teacher</th>
+                <th scope="col">Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                SchoolService schoolService2 = new();
+                var subjects = schoolService2.subjects;
+                foreach (var subject in subjects)
+                {
+                    <tr>
+                        <td>@schoolService2.GetUserById(subject.TeacherId).FullName</td>
+                        <td>@subject.Name</td>  
+                    </tr>
+                }
+            }
+        </tbody>
+</div>

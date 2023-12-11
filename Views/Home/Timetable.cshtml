@@ -12,7 +12,7 @@
     SchoolService schoolService = new SchoolService();
     if (schoolService.classes != null && schoolService.classes.Any())
     {
-
+        <button id="exportButton" class="btn btn-primary">Export Timetable</button>
         List<string> days = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
 
         foreach (var day in days)
@@ -58,5 +58,54 @@
     {
         <p>No schedule available.</p>
     }
+
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("exportButton").addEventListener("click", function () {
+                var xmlContent = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<timetable>';
+
+                var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+                days.forEach(function (day) {
+                    xmlContent += '<day name="' + day + '">';
+
+                    var dayHeaders = document.querySelectorAll('h2');
+                    dayHeaders.forEach(function (dayHeader) {
+                        if (dayHeader.innerText.includes(day)) {
+                            var table = dayHeader.nextElementSibling;
+                            if (table.tagName.toLowerCase() === 'table') {
+                                var dayClasses = table.querySelectorAll('tbody tr');
+
+                                dayClasses.forEach(function (row) {
+                                    var columns = row.querySelectorAll('td');
+                                    xmlContent += '<class>';
+                                    xmlContent += '<time>' + columns[0].innerText + '</time>';
+                                    xmlContent += '<classroom>' + columns[1].innerText + '</classroom>';
+                                    xmlContent += '<subject>' + columns[2].innerText + '</subject>';
+                                    xmlContent += '<teacher>' + columns[3].innerText + '</teacher>';
+                                    xmlContent += '</class>';
+                                });
+                            }
+                        }
+                    });
+
+                    xmlContent += '</day>';
+                });
+
+                xmlContent += '</timetable>';
+
+                var blob = new Blob([xmlContent], { type: 'application/xml' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'timetable_export.xml';
+                link.click();
+            });
+        });
+    </script>
+
 
 }

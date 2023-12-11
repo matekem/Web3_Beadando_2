@@ -36,7 +36,7 @@ namespace Web3_Beadando.Controllers
             _dbContext.Subjects.Add(subject);
             _dbContext.SaveChanges();
 
-            return Redirect("~/Admin");
+            return Redirect("~/");
         }
 
 
@@ -63,7 +63,7 @@ namespace Web3_Beadando.Controllers
             _dbContext.Classrooms.Add(classroom);
             _dbContext.SaveChanges();
 
-            return Redirect("~/Admin");
+            return Redirect("~/");
         }
 
         public IActionResult NewClass()
@@ -83,7 +83,7 @@ namespace Web3_Beadando.Controllers
             _dbContext.Classes.Add(myClass);
             _dbContext.SaveChanges();
 
-            return Redirect("~/Admin");
+            return Redirect("~/");
         }
 
         public IActionResult Assignments()
@@ -99,17 +99,34 @@ namespace Web3_Beadando.Controllers
             assignment.Description = Request.Form["Description"];
             assignment.Deadline = DateTime.Parse(Request.Form["DeadLine"]);
             assignment.Deadline = assignment.Deadline.AddHours(23).AddMinutes(59).AddSeconds(59);
-            assignment.Category = Request.Form["Category"];
+            assignment.CategoryId = new Guid(Request.Form["Category"]);
 
             _dbContext.Assignments.Add(assignment);
             _dbContext.SaveChanges();
 
-            return Redirect("~/Admin");
+            TempData["SuccessMessage"] = "Submission was successful!";
+
+            return Redirect("~/");
         }
         public IActionResult CreateNewUser()
         {
             return View();
         }
 
+        public IActionResult NewCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult NewCategory(Category category)
+        {
+            category.Id = new System.Guid();
+            category.Name = Request.Form["CategoryName"];
+            _dbContext.Categories.Add(category);
+            _dbContext.SaveChanges();
+
+            return Redirect("~/");
+        }
     }
 }

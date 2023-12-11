@@ -11,6 +11,7 @@ public class SchoolContext : IdentityDbContext<ApplicationUser>
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Assignment> Assignments { get; set; }
     public DbSet<Class> Classes { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public SchoolContext(DbContextOptions<SchoolContext> options)
         : base(options)
     {

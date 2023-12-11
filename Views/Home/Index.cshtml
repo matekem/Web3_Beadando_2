@@ -42,6 +42,23 @@
 
             <a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Add new assignment</a>
 
+            <a class="btn btn-primary" href="@Url.Action("NewCategory", "Admin", new { area = "" })">Add new category</a>
+        </div>
+
+        <br />
+<br />
+        <div class="text-center">
+            <h2>Student tools</h2>
+            <br />
+
+            <a class="btn btn-primary" href="@Url.Action("Timetable", "Home", new { area = "" })">Timetable</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Assignments", "Home", new { area = "" })">Assignments</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Stats", "Home", new { area = "" })">Check assignment stats</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Export", "Home", new { area = "" })">Export timetable</a>
+
         </div>
     }
 }

@@ -5,7 +5,14 @@
     ViewData["Title"] = "Assignments";
 }
 
-<h1>New Homework</h1>
+<h1>New Assignment</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
 <form method="post">
     <div class="form-group">
@@ -19,7 +26,7 @@
 
             @{
                 SchoolService schoolService = new SchoolService();
-                var subjects = schoolService.GetAllSubjects();
+                var subjects = schoolService.subjects;
                 var mySubjects = new List<Subject>();
                 foreach(var subject in subjects)
                 {
@@ -41,17 +48,17 @@
                         <option value="@subject.Id">@subject.Name</option>
                     };
 
-                    
+
                 }
-                }
-                   
+            }
+
 
 
         </select>
     </div>
     <div class="form-group">
         <label for="Title">Title:</label>
-<       <input type="text" class="form-control" id="Title" name="Title" required>
+         <input type="text" class="form-control" id="Title" name="Title" required>
     </div>
 
     <div class="form-group">
@@ -62,13 +69,59 @@
     <div class="form-group">
         <label for="category">Category:</label>
         <select class="form-control" id="category" name="Category" required>
-            <option value="Homework">Homework</option>
-            <option value="Test">Test</option>
-            <option value="Exam">Exam</option>
-            <option value="Assignment">Assignment</option>
+            @{
+                var categories = schoolService.categories;
+                foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            }
         </select>
     </div>
 
 
     <button type="submit" class="btn btn-primary">Add Assignment</button>
 </form>
+
+<!--Display all assignments from DB, with options to edit or delete them only if they belong to current user-->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Category</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            SchoolService schoolService2 = new();
+            var assignments = schoolService2.assignments;
+            foreach (var assignment in assignments)
+            {
+              
+                    <tr>
+                        <td>@assignment.Title</td>
+                        <td>@schoolService2.GetSubjectById(assignment.SubjectId).Name</td>
+                        <td>@schoolService2.GetCategoryById(assignment.CategoryId).Name</td>
+                        <td>@assignment.Deadline</td>
+                        <td>@assignment.Description</td>
+                    @{if (schoolService2.GetSubjectById(assignment.SubjectId).TeacherId == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) //Csak a bejelentkezett tanár feladatai jelennek meg
+                        {
+                           <td>
+
+                                <a asp-action="EditAssignment" asp-controller="Admin" asp-route-id="@assignment.Id">Edit</a> |
+                                <a asp-action="DeleteAssignment" asp-controller="Admin" asp-route-id="@assignment.Id">Delete</a>
+                            </td>
+                       
+                        }
+                        
+                    }
+                </tr>
+                
+            }
+        }
+    </tbody>
