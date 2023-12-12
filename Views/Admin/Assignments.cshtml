@@ -6,13 +6,7 @@
 }
 
 <h1>New Assignment</h1>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
-}
+ 
 
 <form method="post">
     <div class="form-group">
@@ -80,10 +74,8 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Add Assignment</button>
+    <button type="submit" class="btn btn-primary">Add</button>
 </form>
-
-<!--Display all assignments from DB, with options to edit or delete them only if they belong to current user-->
 
 <table class="table">
     <thead>
@@ -112,10 +104,11 @@
                     @{if (schoolService2.GetSubjectById(assignment.SubjectId).TeacherId == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) //Csak a bejelentkezett tanár feladatai jelennek meg
                         {
                            <td>
-                                <form asp-action="EditAssignment" method="post" asp-route-id="@assignment.Id">
-                                    <button type="submit" class="btn btn-primary">Edit</button>
-                                </form>
-                                <form asp-action="DeleteAssignment" method="post" asp-route-id="@assignment.Id">
+                                <!--  <form asp-action="EditAssignment" method="post" asp-route-id="@assignment.Id">
+                                         <button type="submit" class="btn btn-primary">Edit</button>
+                                     </form> -->
+                              
+                                <form asp-action="DeleteAssignment" method="post" asp-route-id="@assignment.Id" onclick="return confirm('Are you sure you want to delete assignment: @assignment.Title')">
                                     <button type="submit" class="btn btn-primary">Delete</button>
                                 </form>
                             </td>

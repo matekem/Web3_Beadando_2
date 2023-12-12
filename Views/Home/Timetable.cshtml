@@ -1,9 +1,6 @@
 ﻿@page
 @using Web3_Beadando.Services
 @model SchoolService
-@{
-    ViewBag.Greeting = "Timetable";
-}
 
 <h1>Timetable</h1>
 <br />
@@ -13,6 +10,7 @@
     if (schoolService.classes != null && schoolService.classes.Any())
     {
         <button id="exportButton" class="btn btn-primary">Export Timetable</button>
+        <br />
         List<string> days = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
 
         foreach (var day in days)

@@ -1,5 +1,6 @@
 ﻿@page
 @model RegisterModel
+@using Web3_Beadando.Services
 @{
     ViewData["Title"] = "Register";
 }
@@ -38,12 +39,14 @@
             <select name="Input.Role" id="roles" form="registerForm" class="form-select">
                 <option value="Teacher">Teacher</option>
                 <option value="Student">Student</option>
+                <option value="Sysadmin">Sysadmin</option>
             </select>
 
 <hr />
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
+    <!--
     <div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to register.</h3>
@@ -75,6 +78,8 @@
         </section>
     </div>
 </div>
+    -->
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

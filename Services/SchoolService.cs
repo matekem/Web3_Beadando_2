@@ -11,6 +11,7 @@ namespace Web3_Beadando.Services
         private SchoolContext _dbContext;
         public List<ApplicationUser> users;
         public List<ApplicationUser> teachers;
+        public List<ApplicationUser> applicationUsers;
         public List<Subject> subjects;
         public List<Classroom> classrooms;
         public List<Class> classes;
@@ -22,6 +23,7 @@ namespace Web3_Beadando.Services
             _dbContext = ConnectToDB();
             users = GetAllStudents();
             teachers = GetAllTeachers();
+            applicationUsers = GetAllApplicationUsers();
             subjects = GetAllSubjects();
             classrooms = GetAllClassrooms();
             classes = GetAllClasses();
@@ -40,6 +42,18 @@ namespace Web3_Beadando.Services
         }
 
         #region GetterMethods
+
+
+        private List<ApplicationUser>? GetAllApplicationUsers()
+        {
+            List<ApplicationUser> applicationUsers = new List<ApplicationUser>();
+
+            foreach (var user in _dbContext.Users)
+            {
+                applicationUsers.Add(user);
+            }
+            return applicationUsers;
+        }
 
         public List<ApplicationUser> GetAllTeachers()
         {
@@ -205,7 +219,7 @@ namespace Web3_Beadando.Services
             return category;
         }
 
-        private Assignment GetAssignmentById(Guid id)
+        public Assignment GetAssignmentById(Guid id)
         {
             Assignment assignment = new Assignment();
 
@@ -219,7 +233,7 @@ namespace Web3_Beadando.Services
             return assignment;
         }
 
-        private Class GetClassById(Guid id)
+        public Class GetClassById(Guid id)
         {
             Class lesson = new();
 
@@ -233,9 +247,6 @@ namespace Web3_Beadando.Services
             return lesson;
         }
 
-        #endregion
-
-        #region AddMethods
         #endregion
 
         #region DeleteMethods
@@ -260,8 +271,6 @@ namespace Web3_Beadando.Services
             }
         }
 
-       
-
         internal void DeleteClass(Guid id)
         {
             if(id != null)
@@ -282,6 +291,79 @@ namespace Web3_Beadando.Services
             }
         }
 
+        internal void DeleteClassroom(Guid id)
+        {
+            if(id != null)
+            {
+                var classroom = GetClassroomById(id);
+                _dbContext.Classrooms.Remove(classroom);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        internal void DeleteUser(string id)
+        {
+            if(id != null)
+            {
+                var user = GetUserById(id);
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
+            }
+        }
+
+
+
+
+        #endregion
+
+        #region CreateMethods
+
+        internal void CreateSubject(Subject subject)
+        {
+            if (subject != null)
+            {
+                _dbContext.Subjects.Add(subject);
+                _dbContext.SaveChanges();
+            }
+
+        }
+
+        internal void CreateClassroom(Classroom classroom)
+        {
+            if(classroom != null)
+            {
+                _dbContext.Classrooms.Add(classroom);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        internal void CreateClass(Class myClass)
+        {
+           if(myClass != null)
+            {
+                _dbContext.Classes.Add(myClass);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        internal void CreateAssignment(Assignment assignment)
+        {
+            if(assignment != null)
+            {
+                _dbContext.Assignments.Add(assignment);
+                _dbContext.SaveChanges();
+            }
+
+        }
+
+        internal void CreateCategory(Category category)
+        {
+            if (category != null)
+            {
+                _dbContext.Categories.Add(category);
+                _dbContext.SaveChanges();
+            }
+        }
 
         #endregion
     }

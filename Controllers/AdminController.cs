@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 using Web3_Beadando.Areas.Identity.Data;
 using Web3_Beadando.Migrations;
 using Web3_Beadando.Models;
@@ -8,7 +9,7 @@ using Web3_Beadando.Views.Admin;
 
 namespace Web3_Beadando.Controllers
 {
-    [Authorize(Roles = "Teacher")]
+    [Authorize(Roles = "Teacher,Sysadmin")]
     public class AdminController : Controller
     {
         private readonly SchoolContext _dbContext;
@@ -20,7 +21,7 @@ namespace Web3_Beadando.Controllers
             this._schoolService = schoolService;
         }
 
-       
+        #region Return Views
 
         public IActionResult Index()
         {
@@ -31,44 +32,10 @@ namespace Web3_Beadando.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult NewSubject(Subject subject)
-        {
-            //create new subject from formdata
-            subject.Id = new System.Guid();
-            subject.Name = Request.Form["SubjectName"];
-            subject.TeacherId = Request.Form["TeacherId"];
-            _dbContext.Subjects.Add(subject);
-            _dbContext.SaveChanges();
-
-            return Redirect("~/");
-        }
-
 
         public IActionResult NewClassroom()
         {
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult NewClassroom(Classroom classroom)
-        {
-            classroom.Name = Request.Form["ClassroomName"];
-            classroom.Id = new System.Guid();
-            
-            classroom.isLab = Request.Form["isLab"] == "on";
-            if (classroom.isLab)
-            {
-                classroom.SubjectId  = new System.Guid(Request.Form["SubjectId"]);
-            }
-            else
-            {
-                classroom.SubjectId = Guid.Empty;
-            }
-            _dbContext.Classrooms.Add(classroom);
-            _dbContext.SaveChanges();
-
-            return Redirect("~/");
         }
 
         public IActionResult NewClass()
@@ -76,43 +43,11 @@ namespace Web3_Beadando.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult NewClass(Class myClass)
-        {
-            myClass.Id = new System.Guid();
-            myClass.SubjectId = new System.Guid(Request.Form["SubjectId"]);
-            myClass.Day = Request.Form["Day"];
-            myClass.StartTime = new System.TimeOnly(int.Parse(Request.Form["StartTime"].ToString().Split(":")[0]), int.Parse(Request.Form["StartTime"].ToString().Split(":")[1]), 0);
-            myClass.Duration = int.Parse(Request.Form["classDuration"]);
-            myClass.ClassroomId = new System.Guid(Request.Form["ClassroomId"]);          
-            _dbContext.Classes.Add(myClass);
-            _dbContext.SaveChanges();
-
-            return Redirect("~/");
-        }
-
         public IActionResult Assignments()
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Assignments(Assignment assignment)
-        {
-            assignment.Id = new System.Guid();
-            assignment.SubjectId = new System.Guid(Request.Form["SubjectId"]);
-            assignment.Title = Request.Form["Title"];
-            assignment.Description = Request.Form["Description"];
-            assignment.Deadline = DateTime.Parse(Request.Form["DeadLine"]);
-            assignment.Deadline = assignment.Deadline.AddHours(23).AddMinutes(59).AddSeconds(59);
-            assignment.CategoryId = new Guid(Request.Form["Category"]);
 
-            _dbContext.Assignments.Add(assignment);
-            _dbContext.SaveChanges();
-
-            TempData["SuccessMessage"] = "Submission was successful!";
-
-            return Redirect("~/");
-        }
         public IActionResult CreateNewUser()
         {
             return View();
@@ -123,65 +58,158 @@ namespace Web3_Beadando.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult NewCategory(Category category)
+
+        [Authorize(Roles = "Sysadmin")]
+        public IActionResult DeleteUser()
         {
-            category.Id = new System.Guid();
-            category.Name = Request.Form["CategoryName"];
-            _dbContext.Categories.Add(category);
-            _dbContext.SaveChanges();
+            return View();
+        }
+
+        #endregion
+
+        #region Post methods
+
+        [HttpPost]
+        public IActionResult NewSubject(Subject subject)
+        {
+            //create new subject from formdata
+            subject.Id = new Guid();
+            subject.Name = Request.Form["SubjectName"];
+            subject.TeacherId = Request.Form["TeacherId"];
+
+            _schoolService.CreateSubject(subject);
+
+            TempData["SuccessMessage"] = "Subject created";
 
             return Redirect("~/");
         }
 
-        [HttpPost]        
+        [HttpPost]
+        public IActionResult NewClassroom(Classroom classroom)
+        {
+            classroom.Name = Request.Form["ClassroomName"];
+            classroom.Id = new Guid();
+            
+            classroom.isLab = Request.Form["isLab"] == "on";
+            if (classroom.isLab)
+            {
+                classroom.SubjectId  = new Guid(Request.Form["SubjectId"]);
+            }
+            else
+            {
+                classroom.SubjectId = Guid.Empty;
+            }
+
+            _schoolService.CreateClassroom(classroom);
+
+
+            TempData["SuccessMessage"] = "Classroom created";
+
+            return Redirect("~/");
+        }
+
+        [HttpPost]
+        public IActionResult NewClass(Class myClass)
+        {
+            myClass.Id = new Guid();
+            myClass.SubjectId = new Guid(Request.Form["SubjectId"]);
+            myClass.Day = Request.Form["Day"];
+            myClass.StartTime = new TimeOnly(int.Parse(Request.Form["StartTime"].ToString().Split(":")[0]), int.Parse(Request.Form["StartTime"].ToString().Split(":")[1]), 0);
+            myClass.Duration = int.Parse(Request.Form["classDuration"]);
+            myClass.ClassroomId = new Guid(Request.Form["ClassroomId"]);
+
+            _schoolService.CreateClass(myClass);
+
+            TempData["SuccessMessage"] = "Class created";
+
+            return Redirect("~/");
+        }
+
+        [HttpPost]
+        public IActionResult Assignments(Assignment assignment)
+        {
+            assignment.Id = new Guid();
+            assignment.SubjectId = new Guid(Request.Form["SubjectId"]);
+            assignment.Title = Request.Form["Title"];
+            assignment.Description = Request.Form["Description"];
+            assignment.Deadline = DateTime.Parse(Request.Form["DeadLine"]);
+            assignment.Deadline = assignment.Deadline.AddHours(23).AddMinutes(59).AddSeconds(59);
+            assignment.CategoryId = new Guid(Request.Form["Category"]);
+
+            _schoolService.CreateAssignment(assignment);
+
+            TempData["SuccessMessage"] = "Assignment created";
+
+            return Redirect("~/");
+        }
+
+        [HttpPost]
+        public IActionResult NewCategory(Category category)
+        {
+            category.Id = new Guid();
+            category.Name = Request.Form["CategoryName"];
+
+            _schoolService.CreateCategory(category);
+
+            TempData["SuccessMessage"] = "Category created";
+            return Redirect("~/");
+        }
+
+        [HttpPost]
         public IActionResult DeleteClassroom(Guid id)
         {
-            // Perform the deletion logic
-            _schoolService.DeleteSubject(id);
-
-            // Redirect to the page where classrooms are displayed
-            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+            string name = _schoolService.GetClassroomById(id).Name;
+            _schoolService.DeleteClassroom(id);
+            TempData["SuccessMessage"] = $"Classroom \"{name}\" deleted.";
+            return Redirect("~/");
         }
 
         [HttpPost]
         public IActionResult DeleteSubject(Guid id)
         {
-            // Perform the deletion logic
+            string name = _schoolService.GetSubjectById(id).Name;
             _schoolService.DeleteSubject(id);
-
-            // Redirect to the page where classrooms are displayed
-            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+            TempData["SuccessMessage"] = $"Subject \"{name}\" deleted.";
+            return Redirect("~/");
         }
 
         [HttpPost]
         public IActionResult DeleteAssignment(Guid id)
         {
-            // Perform the deletion logic
+            string name = _schoolService.GetAssignmentById(id).Title;
             _schoolService.DeleteAssignment(id);
-
-            // Redirect to the page where classrooms are displayed
-            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+            TempData["SuccessMessage"] = $"Assignment \"{name}\" deleted.";
+            return Redirect("~/");
         }
 
         [HttpPost]
         public IActionResult DeleteClass(Guid id)
         {
-            // Perform the deletion logic
             _schoolService.DeleteClass(id);
-
-            // Redirect to the page where classrooms are displayed
-            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+            TempData["SuccessMessage"] = $"Class deleted.";
+            return Redirect("~/");
         }
 
         [HttpPost]
         public IActionResult DeleteCategory(Guid id)
         {
-            // Perform the deletion logic
+            string name = _schoolService.GetCategoryById(id).Name;
             _schoolService.DeleteCategory(id);
-
-            // Redirect to the page where classrooms are displayed
-            return RedirectToAction("Index"); // You might need to adjust this based on your route configuration
+            TempData["SuccessMessage"] = $"Category \"{name}\" deleted.";
+            return Redirect("~/");
         }
+
+        [Authorize(Roles = "Sysadmin")]
+        [HttpPost]
+        public IActionResult DeleteUser(string id)
+        {
+            string name = _schoolService.GetUserById(id).UserName;
+            _schoolService.DeleteUser(id);
+            TempData["SuccessMessage"] = $"User \"{name}\" deleted.";
+            return Redirect("~/");
+        }
+
+        #endregion
+
     }
 }

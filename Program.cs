@@ -63,11 +63,12 @@ namespace Web3_Beadando
 
             app.MapRazorPages();
 
+            #region Seed Built-in users and roles
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                var roles = new[] { "Teacher", "Student" };
+                var roles = new[] { "Teacher", "Student", "Sysadmin" };
 
                 foreach (var role in roles)
                 {
@@ -77,12 +78,13 @@ namespace Web3_Beadando
                     }
                 }
             }
+
             
             using (var scope = app.Services.CreateScope())
             {
                 var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                string email = "admin@admin.hu";
+                string email = "teacher@asd.hu";
                 string password = "asdQWE123!";
 
                 if (await usermanager.FindByEmailAsync(email) == null)
@@ -91,7 +93,7 @@ namespace Web3_Beadando
                     {
                         UserName = email,
                         Email = email,
-                        FullName = "Admin User",
+                        FullName = "Built-in Teacher",
                         Role = "Teacher"
                     };
 
@@ -103,7 +105,33 @@ namespace Web3_Beadando
                     }
                 }
             }
-            
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var usermanager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                string email = "sysadmin@asd.hu";
+                string password = "asdQWE123!";
+
+                if (await usermanager.FindByEmailAsync(email) == null)
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        FullName = "Built-in Sysadmin",
+                        Role = "Sysadmin"
+                    };
+
+                    var result = await usermanager.CreateAsync(user, password);
+
+                    if (result.Succeeded)
+                    {
+                        await usermanager.AddToRoleAsync(user, "Sysadmin");
+                    }
+                }
+            }
+            #endregion
 
             app.Run();
         }

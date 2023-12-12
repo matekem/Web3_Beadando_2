@@ -7,6 +7,7 @@ using Web3_Beadando.Services;
 
 namespace Web3_Beadando.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,7 +16,6 @@ namespace Web3_Beadando.Controllers
         {
             _logger = logger;
         }
-        [Authorize]
         public IActionResult Index()
         {
             ViewData["Message"] = "Welcome to the Home Page!";
@@ -28,6 +28,7 @@ namespace Web3_Beadando.Controllers
         }
         public IActionResult Timetable()
         {
+            ViewData["Title"] = "Timetable";
             return View();
         }
         public IActionResult Assignments()

@@ -38,16 +38,14 @@
         </select>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">Add Classroom</button>
+    <button type="submit" class="btn btn-primary">Add</button>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Hide subject group initially
         $("#subjectGroup").hide();
 
-        // Toggle subject group visibility on checkbox change
         $("#isLab").change(function () {
             if ($(this).is(":checked")) {
                 $("#subjectGroup").show();
@@ -80,12 +78,14 @@
                         <td>@classroom.Name</td>
                         <td>@isLab</td>
                         <td>@classroomSubject.Name</td>
-                        <td>                          
+                        <td>
+                            <!-- 
                             <form asp-action="EditClassrom" method="post" asp-route-id="@classroom.Id">
                                 <button type="submit">Edit</button>
-                            </form>|
-                            <form asp-action="DeleteClassroom" method="post" asp-route-id="@classroom.Id">
-                                <button type="submit">Delete</button>
+                            </form>|-->
+
+                            <form asp-action="DeleteClassroom" method="post" asp-route-id="@classroom.Id" onclick="return confirm('Are you sure you want to delete classroom: @classroom.Name ?')">
+                                <button type="submit" class="btn btn-primary">Delete</button>
                             </form>
                         </td>
                     </tr>

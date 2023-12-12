@@ -15,7 +15,7 @@ using Web3_Beadando.Models;
 
 namespace Web3_Beadando.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = "Teacher")]
+    [Authorize(Roles = "Sysadmin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -130,6 +130,10 @@ namespace Web3_Beadando.Areas.Identity.Pages.Account
                 if (Input.Role == "Teacher")
                 {
                     await _userManager.AddToRoleAsync(user, "Teacher");
+                }
+                else if(Input.Role == "Sysadmin")
+                {
+                    await _userManager.AddToRoleAsync(user, "Sysadmin");
                 }
                 else
                 {

@@ -76,7 +76,7 @@
         </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Add Lesson</button>
+    <button type="submit" class="btn btn-primary">Add</button>
 </form>
 
         <!-- display all classes from db in table with options to delete or edit-->
@@ -103,11 +103,11 @@
                         <td>@lesson.Duration</td>
                         <td>@schoolService2.GetClassroomById(lesson.ClassroomId).Name</td>
                      <td>
-                    <form asp-action="EditClass" method="post" asp-route-id="@lesson.Id">
+                    <!--<form asp-action="EditClass" method="post" asp-route-id="@lesson.Id">
                         <button type="submit">Edit </button>
-                    </form>|
-                    <form asp-action="DeleteClass" method="post" asp-route-id="@lesson.Id">
-                        <button type="submit">Delete</button>
+                    </form>|-->
+                    <form asp-action="DeleteClass" method="post" asp-route-id="@lesson.Id" onclick="return confirm('Are you sure you want to delete this class?')">
+                        <button type="submit" class="btn btn-primary">Delete</button>
                     </form>
                     </td>
                     </tr>

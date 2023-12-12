@@ -54,7 +54,7 @@
          }
 </select>
     </div>
-          <input type="submit" />
+    <button type="submit" class="btn btn-primary">Add</button>
 
 </form> 
     
@@ -79,11 +79,11 @@
                         <td>@schoolService2.GetUserById(subject.TeacherId).FullName</td>
                         <td>@subject.Name</td>
                         <td>
-                            <form asp-action="EditSubject" method="post" asp-route-id="@subject.Id">
+                            <!-- <form asp-action="EditSubject" method="post" asp-route-id="@subject.Id">
                                 <button type="submit" class="btn btn-primary">Edit</button>
                             </form>
-                            <br />
-                            <form asp-action="DeleteSubject" method="post" asp-route-id="@subject.Id">
+                            <br />-->
+                            <form asp-action="DeleteSubject" method="post" asp-route-id="@subject.Id" onclick="return confirm('Are you sure you want to delete subject: @subject.Name ?')">
                                 <button type="submit" class="btn btn-primary">Delete</button>
                             </form>
                         </td>

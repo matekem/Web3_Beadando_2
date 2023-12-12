@@ -5,7 +5,12 @@
    // ViewData["Title"] = "Home";
 }
 
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
 @{
     if (User.IsInRole("Student"))
@@ -20,12 +25,10 @@
 
             <a class="btn btn-primary" href="@Url.Action("Stats", "Home", new { area = "" })">Check assignment stats</a>
 
-            <a class="btn btn-primary" href="@Url.Action("Export", "Home", new { area = "" })">Export timetable</a>
-
         </div>
     }
 
-    else if(User.IsInRole("Teacher"))
+    else if(User.IsInRole("Teacher") || User.IsInRole("Sysadmin"))
     {
         <div class="text-center">
 
@@ -34,15 +37,17 @@
 
             <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create a new user</a>
 
-            <a class="btn btn-primary" href="@Url.Action("NewSubject", "Admin", new { area = "" })">Add New Subject</a>
+            <a class="btn btn-primary" href="@Url.Action("DeleteUser", "Admin", new { area = "" })">Delete user</a>
 
-            <a class="btn btn-primary" href="@Url.Action("NewClassroom", "Admin", new { area = "" })">Add New Classroom</a>
+            <a class="btn btn-primary" href="@Url.Action("NewSubject", "Admin", new { area = "" })">Subjects</a>
 
-            <a class="btn btn-primary" href="@Url.Action("NewClass", "Admin", new { area = "" })">Add new class</a>
+            <a class="btn btn-primary" href="@Url.Action("NewClassroom", "Admin", new { area = "" })">Classrooms</a>
 
-            <a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Add new assignment</a>
+            <a class="btn btn-primary" href="@Url.Action("NewClass", "Admin", new { area = "" })">Classes</a>
 
-            <a class="btn btn-primary" href="@Url.Action("NewCategory", "Admin", new { area = "" })">Add new category</a>
+            <a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Assignments</a>
+
+            <a class="btn btn-primary" href="@Url.Action("NewCategory", "Admin", new { area = "" })">Categories</a>
         </div>
 
         <br />
@@ -56,8 +61,6 @@
             <a class="btn btn-primary" href="@Url.Action("Assignments", "Home", new { area = "" })">Assignments</a>
 
             <a class="btn btn-primary" href="@Url.Action("Stats", "Home", new { area = "" })">Check assignment stats</a>
-
-            <a class="btn btn-primary" href="@Url.Action("Export", "Home", new { area = "" })">Export timetable</a>
 
         </div>
     }
