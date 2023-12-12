@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 using Web3_Beadando.Areas.Identity.Data;
-using Web3_Beadando.Migrations;
 using Web3_Beadando.Models;
 using Web3_Beadando.Services;
-using Web3_Beadando.Views.Admin;
 
 namespace Web3_Beadando.Controllers
 {
@@ -30,6 +27,7 @@ namespace Web3_Beadando.Controllers
 
         public IActionResult NewSubject()
         {
+            ViewData["Title"] = "Subjects";
             return View();
         }
 

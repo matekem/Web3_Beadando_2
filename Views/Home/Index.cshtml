@@ -28,11 +28,44 @@
         </div>
     }
 
-    else if(User.IsInRole("Teacher") || User.IsInRole("Sysadmin"))
+    else if(User.IsInRole("Teacher"))
     {
         <div class="text-center">
 
             <h1>Home Page - Teacher</h1>
+            <br />
+
+
+            <a class="btn btn-primary" href="@Url.Action("NewSubject", "Admin", new { area = "" })">Subjects</a>
+
+            <a class="btn btn-primary" href="@Url.Action("NewClassroom", "Admin", new { area = "" })">Classrooms</a>
+
+            <a class="btn btn-primary" href="@Url.Action("NewClass", "Admin", new { area = "" })">Classes</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Assignments", "Admin", new { area = "" })">Assignments</a>
+
+            <a class="btn btn-primary" href="@Url.Action("NewCategory", "Admin", new { area = "" })">Categories</a>
+        </div>
+
+        <br />
+<br />
+        <div class="text-center">
+            <h2>Student tools</h2>
+            <br />
+
+            <a class="btn btn-primary" href="@Url.Action("Timetable", "Home", new { area = "" })">Timetable</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Assignments", "Home", new { area = "" })">Assignments</a>
+
+            <a class="btn btn-primary" href="@Url.Action("Stats", "Home", new { area = "" })">Check assignment stats</a>
+
+        </div>
+    }
+    else if (User.IsInRole("Sysadmin"))
+    {
+        <div class="text-center">
+
+            <h1>Home Page - Sysadmin</h1>
             <br />
 
             <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Create a new user</a>
@@ -51,7 +84,7 @@
         </div>
 
         <br />
-<br />
+        <br />
         <div class="text-center">
             <h2>Student tools</h2>
             <br />

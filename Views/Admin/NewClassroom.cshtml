@@ -1,5 +1,4 @@
 ﻿@using Web3_Beadando.Services;
-@model SchoolService
 @{
     ViewData["Title"] = "New Classroom";
 }
@@ -79,10 +78,6 @@
                         <td>@isLab</td>
                         <td>@classroomSubject.Name</td>
                         <td>
-                            <!-- 
-                            <form asp-action="EditClassrom" method="post" asp-route-id="@classroom.Id">
-                                <button type="submit">Edit</button>
-                            </form>|-->
 
                             <form asp-action="DeleteClassroom" method="post" asp-route-id="@classroom.Id" onclick="return confirm('Are you sure you want to delete classroom: @classroom.Name ?')">
                                 <button type="submit" class="btn btn-primary">Delete</button>

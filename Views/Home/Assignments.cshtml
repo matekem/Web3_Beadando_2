@@ -21,7 +21,6 @@
     </thead>
     <tbody>@{
         SchoolService schoolService = new SchoolService();
-        //Sort assigments by deadline
             var assigments = schoolService.assignments.OrderBy(x => x.Deadline);
             foreach (var assignment in assigments)
             {

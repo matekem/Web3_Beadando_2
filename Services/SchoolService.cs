@@ -301,7 +301,7 @@ namespace Web3_Beadando.Services
             }
         }
 
-        internal void DeleteUser(string id)
+        public void DeleteUser(string id)
         {
             if(id != null)
             {
