@@ -100,7 +100,8 @@
                         <td>@schoolService2.GetCategoryById(assignment.CategoryId).Name</td>
                         <td>@assignment.Deadline</td>
                         <td>@assignment.Description</td>
-                    @{if (schoolService2.GetSubjectById(assignment.SubjectId).TeacherId == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) //Csak a bejelentkezett tanár feladatai jelennek meg
+                    @{
+                        if ((schoolService2.GetSubjectById(assignment.SubjectId).TeacherId == User.FindFirstValue(ClaimTypes.NameIdentifier).Trim()) || User.IsInRole("Sysadmin")) //Csak a bejelentkezett tanár feladatai jelennek meg
                         {
                            <td>
                                 <form asp-action="DeleteAssignment" method="post" asp-route-id="@assignment.Id" onclick="return confirm('Are you sure you want to delete assignment: @assignment.Title')">

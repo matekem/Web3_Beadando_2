@@ -6,10 +6,8 @@
     SchoolService schoolService = new();
     var assignments = schoolService.assignments;
 
-    // Get all categories
-    var allCategories = schoolService.GetAllCategories();
+    var allCategories = schoolService.categories;
 
-    // Count occurrences of each category, including 0 counts
     var categoryCounts = allCategories
         .Select(category => new
         {
